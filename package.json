@@ -21,7 +21,8 @@
     "grunt-contrib-watch": "1.0.0",
     "grunt-sails-linker": "~0.10.1",
     "grunt-sync": "0.5.2",
-    "include-all": "^1.0.0",
+    "include-all": "^1.0.8",
+    "node-uuid": "^1.4.7",
     "node-wol": "^0.1.1",
     "progress-stream": "^1.2.0",
     "pubsub-js": "^1.5.4",
@@ -32,6 +33,7 @@
     "sails": "~0.12.9",
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.1",
+    "sails-util-mvcsloader": "^0.4.0",
     "systemjs": "0.19.27",
     "tftp": "^0.1.2",
     "zone.js": "^0.6.23"
