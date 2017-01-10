@@ -9,50 +9,48 @@ module.exports = {
 
   attributes: {
     title: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
     description: {
       type: 'string'
-    },
-    optional: {
-      type: 'boolean',
-      defaultsTo: false
-    },
-    wait: {
-      type: 'boolean',
-      defaultsTo: true
-    },
-    action: {
-      type: 'function'
-    },
-    payload: {
-      type: 'json'
-    },
+    }, 
     runner: {
       type: 'string',
-      defaultsTo: 'server'
+      defaultsTo: 'server',
+      required: true
     },
-    event: {
+    subRunner: {
       type: 'string'
+    },
+    state: {
+      type: 'integer',
+      defaultsTo: 0,
+      required: true
+    },    
+    payload: {
+      type: 'json',
+      required: true
+    },
+    workflow: {
+      model: 'Workflow',
+      required: true
     },
     progress: {
       type: 'float',
-      defaultsTo: 0
+      defaultsTo: 0,
+      required: true
     },
     progressText: {
-      type: 'string'
+      type: 'string',
+      defaultsTo: '',
+      required: true
     },
     startTime: {
       type: 'datetime'
     },   
     completionTime: {
       type: 'datetime'
-    },
-    state: {
-      type: 'string'
-    },
-    workflow: {
-      model: 'Workflow'
     },
   }
 };

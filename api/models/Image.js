@@ -16,11 +16,13 @@ module.exports = {
     },
     writeLock: {
       type: 'boolean',
-      defaultsTo: false
+      defaultsTo: false,
+      required: true
     },
     readers: {
       type: 'integer',
-      defaultsTo: 0
+      defaultsTo: 0,
+      required: true
     },
     hosts: {
       collection: 'Host',

@@ -1,32 +1,41 @@
 module.exports = {
-  createWorkflow: function(hostId, baseAction) {
-      BusService.publish('workflow.create', hostId);
-  },
-  cancelWorkflow: function(id) {
-      BusService.publish('workflow.cancel', id);
-  },
-  findAllWorkflows: function(hostId) {
-     Workflow.find({host: hostId}).exec(function(err, workflow) {
-      if(err) throw err;
-      next(workflow);
-    });  
-  },
-  findWorkflows: function(hostId, state) {
-     Workflow.find([{host: hostId}, {state: state}]).exec(function(err, workflow) {
-      if(err) throw err;
-      next(workflow);
-    });   
-  },
-  getWorkflows: function() {
-    Workflow.find().exec(function(err, workflows) {
-      if(err) throw err;
-      next(workflows);
+  get: function(id, next) {  
+    Workflow.findOne({id: id}).populateAll().exec(function(err, result) {
+      if(err) return next(err);
+      next(null, result);
     });
   },
-  registerTaskFactory: function(topic, taskFactory) {
-
+  search: function(query, next) {  
+    Workflow.find(query).populateAll().exec(function(err, result) {
+      if(err) return next(err);
+      next(null, result);
+    });
+  },  
+  getAll: function(next) {
+    Workflow.find().populateAll().exec(function(err, result) {
+      if(err) return next(err);
+      next(null, result);
+    });
   },
-  unregisterTaskFactory: function(topic, taskFactory) {
-
+  create: function(params, next) {
+    Workflow.create(params).exec(function(err, result) {
+      if(err) return next(err);
+      BusService.publish('workflow.create', result);
+      next(null, result);
+    });
+  },
+  update: function(id, params, next) {
+    Workflow.update({id: id}, params).exec(function(err, result) {
+      if(err) return next(err);
+      BusService.publish('workflow.update', result);
+      next(null, result);
+    });
+  },  
+  destroy: function(id, next) {
+    Workflow.destroy({id: id}).exec(function(err, result) {
+      if(err) return next(err);
+      BusService.publish('workflow.destroy', result);
+      next(null, result);
+    });
   }
 };

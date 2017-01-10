@@ -1,0 +1,9 @@
+{
+  "enabled": [
+    "wol"
+  ],
+  "disabled": [
+    "tftp-server",
+    "dhcp-proxy"
+  ]
+}

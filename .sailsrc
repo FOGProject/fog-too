@@ -4,5 +4,12 @@
   },
   "hooks": {
     "views": false
+  },
+  "state": {
+    "READY": 0,
+    "RUNNING": 1,
+    "COMPLETE": 2,
+    "CANCELLED": 3,
+    "FAILED": 4
   }
 }

@@ -12,7 +12,9 @@ module.exports = {
       required: true
     },
     priority: {
-      type: 'integer'
+      type: 'integer',
+      defaultsTo: 0,
+      required: true
     },
     hosts: {
       collection: 'host',

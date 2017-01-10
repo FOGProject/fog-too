@@ -9,18 +9,28 @@ module.exports = {
 
   attributes: {
     title: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
     description: {
       type: 'string'
     },
+    tasks: {
+      collection: 'Task',
+      via: 'workflow',
+      defaultsTo: [],
+      required: true
+    },
     state: {
-      type: 'string',
-      defaultsTo: 'blocked'
+      type: 'integer',
+      defaultsTo: 0,
+      required: true
     },
     tasks: {
       collection: 'Task',
-      via: 'workflow'
+      via: 'workflow',
+      defaultsTo: [],
+      required: true
     },
     host: {
       model: 'Host'

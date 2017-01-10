@@ -23,7 +23,43 @@
 module.exports.routes = {
 
   '/': function(req, res) { return res.send('FOG Backend'); },
-  
+
+  /**
+   * Auth API
+   */
+  'post /register': 'UserController.create',
+  'post /logout': 'AuthController.logout',
+
+  'post /auth/local': 'AuthController.callback',
+  'post /auth/local/:action': 'AuthController.callback',
+
+  'post /auth/:provider': 'AuthController.callback',
+  'post /auth/:provider/:action': 'AuthController.callback',
+
+  'get /auth/:provider': 'AuthController.provider',
+  'get /auth/:provider/callback': 'AuthController.callback',
+  'get /auth/:provider/:action': 'AuthController.callback',  
+
+  /**
+   * User API
+   */
+  'get /user': {
+    controller: 'UserController',
+    action: 'list',
+    skipAssets: true
+  },
+  'get /user/search' : {
+    controller: 'UserController',
+    action: 'search',
+    skipAssets: true
+  },
+  'get /user/:id': {
+    controller: 'UserController',
+    action: 'find',
+    skipAssets: true
+  },
+
+
   /**
    * Host API
    */
@@ -145,4 +181,74 @@ module.exports.routes = {
     action: 'destroy',
     skipAssets: true
   },   
+
+  /**
+   * Workflow API
+   */
+  'get /workflow': {
+    controller: 'WorkflowController',
+    action: 'list',
+    skipAssets: true
+  },
+
+  'get /workflow/search' : {
+    controller: 'WorkflowController',
+    action: 'search',
+    skipAssets: true
+  },
+  'get /workflow/:id': {
+    controller: 'WorkflowController',
+    action: 'find',
+    skipAssets: true
+  },
+  'post /workflow': {
+    controller: 'WorkflowController',
+    action: 'create',
+    skipAssets: true
+  },
+  'put /workflow/:id': {
+    controller: 'WorkflowController',
+    action: 'update',
+    skipAssets: true
+  },
+  'delete /workflow/:id': {
+    controller: 'WorkflowController',
+    action: 'destroy',
+    skipAssets: true
+  },
+
+  /**
+   * Task API
+   */
+  'get /task': {
+    controller: 'TaskController',
+    action: 'list',
+    skipAssets: true
+  },
+
+  'get /task/search' : {
+    controller: 'TaskController',
+    action: 'search',
+    skipAssets: true
+  },
+  'get /task/:id': {
+    controller: 'TaskController',
+    action: 'find',
+    skipAssets: true
+  },
+  'post /task': {
+    controller: 'TaskController',
+    action: 'create',
+    skipAssets: true
+  },
+  'put /task/:id': {
+    controller: 'TaskController',
+    action: 'update',
+    skipAssets: true
+  },
+  'delete /task/:id': {
+    controller: 'TaskController',
+    action: 'destroy',
+    skipAssets: true
+  },
 };
