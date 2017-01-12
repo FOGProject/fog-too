@@ -4,8 +4,13 @@
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
-var _ = require('lodash');
-var crypto = require('crypto');
+var bcrypt = require('bcryptjs');
+var hashPassword = function(password, next) {
+  bcrypt.hash(password, sails.config.auth.bcrypt.rounds, function(err, hash) {
+    if (err) return next(err);
+    next(null, hash);
+  });
+};
 
 module.exports = {
   attributes: {
@@ -19,28 +24,40 @@ module.exports = {
       unique: true,
       required: true
     },
-    passports: {
-      collection: 'Passport',
-      via: 'user'
+    password: {
+      type: 'string',
+      required: true,
+      minLength: 8
+    },
+    role: {
+      model: 'Role'
     },
 
     toJSON: function () {
       var user = this.toObject();
       delete user.password;
       return user;
-    }
-  },
-
-  /**
-   * Register a new User with a passport
-   */
-  register: function (user) {
-    return new Promise(function (resolve, reject) {
-      sails.services.passport.protocols.local.createUser(user, function (error, created) {
-        if (error) return reject(error);
-
-        resolve(created);
+    },
+    comparePassword: function(candidatePassword, next) {
+      bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) return next(err);
+        next(null, isMatch);
       });
+    }, 
+  },
+  beforeCreate: function (values, next) {
+    hashPassword(values.password, function(err, hash) {
+      if (err) return next(err);
+      values.password = hash;
+      next();
+    });
+  },
+  beforeUpdate: function (values, next) {
+    if(!values.hasOwnProperty('password')) return next();
+    hashPassword(values.password, function(err, hash) {
+      if (err) return next(err);
+      values.password = hash;
+      next();
     });
   }
 };

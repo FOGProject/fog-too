@@ -10,7 +10,6 @@
  */
 
 module.exports.bootstrap = function(cb) {
-  sails.services.passport.loadStrategies()
   WatchdogService.initialize();
   PluginService.initialize(function(err) {
     BusService.publish('server.load', null);

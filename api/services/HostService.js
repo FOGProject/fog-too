@@ -37,11 +37,5 @@ module.exports = {
       BusService.publish('host.destroy', result);
       next(null, result);
     });
-  },
-  deploy: function(id, next) {
-    WorkflowService.create('host.deploy', id);
-  },
-  capture: function(id, next) {
-    WorkflowService.create('host.capture', id);
   }
 };
