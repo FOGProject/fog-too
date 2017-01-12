@@ -11,7 +11,7 @@ var filterPermissions = function(permissions) {
 
   var toValidate = flatten(permissions);
 
-  // Filter out unknown permissionms
+  // Filter out unknown permissions
   for(var i = 0; i < toValidate.length; i++) {
     if(!_.get(sails.config.permissions, toValidate[i]))
       _.set(permissions, toValidate[i], undefined);

@@ -3,7 +3,7 @@ module.exports.auth = {
     rounds: 10
   },
   jwt: {
-    secret: 'Foobar22@58',
+    secret: null,
     expiresIn: '24h'
   }
 };
