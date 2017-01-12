@@ -64,6 +64,6 @@ module.exports = {
             if (err) return res.serverError(err);
             res.json(result);
         });       
-    },      
+    },
 };
 

@@ -20,6 +20,17 @@ module.exports.routes = {
   'delete /user': 'UserController.destroy',  
 
   /**
+   * Role API
+   */
+  'get /role': 'RoleController.list',
+  'get /role/search': 'RoleController.search',
+  'get /role/:id': 'RoleController.find',
+  'post /role': 'RoleController.create',
+  'put /role': 'RoleController.update',
+  'delete /role': 'RoleController.destroy',  
+  'put /role/:id/assign': 'RoleController.assign',
+
+  /**
    * Host API
    */
   'get /host': 'HostController.list',

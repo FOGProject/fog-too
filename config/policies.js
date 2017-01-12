@@ -19,14 +19,62 @@
 
 module.exports.policies = {
 
-  /***************************************************************************
-  *                                                                          *
-  * Default policy for all controllers and actions (`true` allows public     *
-  * access)                                                                  *
-  *                                                                          *
-  ***************************************************************************/
+  GroupController: {
+    list: ['isAuthenticated', 'groupRead'],
+    find: ['isAuthenticated', 'groupRead'],
+    search: ['isAuthenticated', 'groupRead'],
+    create: ['isAuthenticated', 'groupCreate'],
+    update: ['isAuthenticated', 'groupUpdate'],
+    destroy: ['isAuthenticated', 'groupDestroy'],
+    registerHost: ['isAuthenticated', 'groupRegister'],
+    unregisterHost: ['isAuthenticated', 'groupUnregister'],    
+  },
+
+  HostController: {
+    list: ['isAuthenticated', 'hostRead'],
+    find: ['isAuthenticated', 'hostRead'],
+    search: ['isAuthenticated', 'hostRead'],
+    create: ['isAuthenticated', 'hostCreate'],
+    update: ['isAuthenticated', 'hostUpdate'],
+    destroy: ['isAuthenticated', 'hostDestroy'],
+  },
+
+  ImageController: {
+    list: ['isAuthenticated', 'imageRead'],
+    find: ['isAuthenticated', 'imageRead'],
+    search: ['isAuthenticated', 'imageRead'],
+    create: ['isAuthenticated', 'imageCreate'],
+    update: ['isAuthenticated', 'imageUpdate'],
+    destroy: ['isAuthenticated', 'imageDestroy'],
+    deploy: ['isAuthenticated', 'imageDeploy'],
+    capture: ['isAuthenticated', 'imageCapture'],
+  }, 
+
+   RoleController: {
+    list: ['isAuthenticated', 'roleRead'],
+    find: ['isAuthenticated', 'roleRead'],
+    search: ['isAuthenticated', 'roleRead'],
+    create: ['isAuthenticated', 'roleCreate'],
+    update: ['isAuthenticated', 'roleUpdate'],
+    destroy: ['isAuthenticated', 'roleDestroy'],
+    assign: ['isAuthenticated', 'roleAssign']
+  },
 
   UserController: {
-    '*': 'isAuthenticated'
-  }
+    list: ['isAuthenticated', 'userRead'],
+    find: ['isAuthenticated', 'userRead'],
+    search: ['isAuthenticated', 'userRead'],
+    create: ['isAuthenticated', 'userCreate'],
+    update: ['isAuthenticated', 'userUpdate'],
+    destroy: ['isAuthenticated', 'userDestroy'],
+  },
+
+  WorkflowController: {
+    list: ['isAuthenticated', 'workflowRead'],
+    find: ['isAuthenticated', 'workflowRead'],
+    search: ['isAuthenticated', 'workflowRead'],
+    create: ['isAuthenticated', 'workflowCreate'],
+    update: ['isAuthenticated', 'workflowUpdate'],
+    destroy: ['isAuthenticated', 'workflowDestroy'],
+  }, 
 };

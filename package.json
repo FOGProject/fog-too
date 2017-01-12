@@ -11,6 +11,7 @@
     "ejs": "2.3.4",
     "es6-promise": "^4.0.5",
     "express": "^4.14.0",
+    "flat": "^2.0.1",
     "grunt": "1.0.1",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "1.0.0",

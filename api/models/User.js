@@ -30,7 +30,8 @@ module.exports = {
       minLength: 8
     },
     role: {
-      model: 'Role'
+      model: 'Role',
+      required: true
     },
 
     toJSON: function () {
