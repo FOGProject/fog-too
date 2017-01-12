@@ -28,6 +28,11 @@ module.exports.http = {
       expressApp.disable('x-powered-by');
       next();
     },
+    trustProxy: function(request, response, next) {
+      var expressApp = sails.hooks.http.app;
+      expressApp.enable('trust proxy');
+      next();
+    },
   /***************************************************************************
   *                                                                          *
   * The order in which middleware should be run for HTTP request. (the Sails *
@@ -46,6 +51,7 @@ module.exports.http = {
     //   'methodOverride',
     //   'poweredBy',
          'disablePoweredBy',
+         'trustProxy',
     //   '$custom',
     //   'router',
     //   'www',
