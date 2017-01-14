@@ -49,9 +49,9 @@ module.exports = {
         }
         return revisions;
     },
-    getCurrentRevision: function(next) {
+    getCurrentRevision: function(db, next) {
         next = (typeof next !== 'function') ? function() {} : next;
-        setting.get("schema", function(err, value) {
+        setting.get(db, "schema", function(err, value) {
             if (err) return next(err);
             if (!value) return next('Schema revision not set in database');
             if (value.revision === undefined) return next('Schema revision not set in database');
@@ -68,13 +68,13 @@ module.exports = {
         step = (typeof step !== 'function') ? function() {} : step;
         next = (typeof next !== 'function') ? function() {} : next;
         
-        module.exports.getCurrentRevision(function(err, current) {
+        database.connect(conn.host, conn.port, conn.database, conn.user, conn.password, function(err, db) {
             if (err) return next (err);
-            var upgrade = target > current;
-            var revisions = module.exports.getMigrations(current, target);
-            database.connect(conn.host, conn.port, conn.database, conn.user, conn.password, function(err, db) {
+            module.exports.getCurrentRevision(db, function(err, current) {
                 if(err) return next(err);
-                async.eachSeries(revisions, function(rev, next) {
+                var upgrade = target > current;
+                var revisions = module.exports.getMigrations(current, target);                
+                    async.eachSeries(revisions, function(rev, next) {
                     var toRev = rev._meta.schema;
                     if (!upgrade)
                         toRev--;
@@ -83,7 +83,7 @@ module.exports = {
                     action(db, console, function(err) {
                         if (err) return next(err);
                         current = toRev;
-                        setting.set("schema", {revision: toRev}, next);
+                        setting.set(db, "schema", {revision: toRev}, next);
                     });
                 }, function(err) {
                     db.close();

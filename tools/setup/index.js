@@ -5,31 +5,21 @@ var chalk = require('chalk');
 var CLI = require('clui');
 var Spinner = CLI.Spinner;
 
+var header = require('../lib/header');
 var config = require('../lib/config');
 var inquire = require('./lib/inquire');
 var schema = require('./lib/schema');
 var secure = require('./lib/secure');
 
-var welcome = 'Welcome to the FOG 2.0 installer.\nYou will be guided through configuring your new server for production.'
+var welcome = 'Welcome to the FOG installer.\nYou will be guided through configuring your new server for production.'
 var COMPLETED = false;
 var payload = {};
 
-var printHeader = function(text) {
-    console.log();
-    console.log(chalk.yellow(text));
-}
-
-console.log(
-  chalk.cyan(
-    figlet.textSync('FOG 2.0', { horizontalLayout: 'full' })
-  )
-);
-console.log();
-console.log(welcome);
+header.print(welcome);
 
 async.waterfall([
     function(next) {
-        printHeader("Database configuration")
+        header.printSection("Database configuration")
         inquire.getDatabaseInfo(function(answers) {
             if(!answers.username.length)
                 delete answers.username;
@@ -40,14 +30,14 @@ async.waterfall([
         });
     },
     function(next) {
-        printHeader("Administrator account configuration");
+        header.printSection("Administrator account configuration");
         inquire.getAdminInfo(function(answers) {
             payload.admin = answers;
             next();
         });       
     },
     function(next) {
-        printHeader("Webserver configuration");
+        header.printSection("Webserver configuration");
         inquire.getWebserverInfo(function(answers) {
             payload.port = answers.port;
             payload.host = answers.host;
@@ -58,7 +48,7 @@ async.waterfall([
         });       
     },
     function(next) {
-        printHeader("Securing installation");
+        header.printSection("Securing installation");
         var status = new Spinner('Generating session secret');
         status.start();  
         payload.session = {};
@@ -84,7 +74,7 @@ async.waterfall([
         });
     },
     function(next) {
-        printHeader("Applying configuration");
+        header.printSection("Applying configuration");
         var status = new Spinner('Saving configuration');
         status.start();  
         var toWrite = JSON.parse(JSON.stringify(payload)); // quick deep clone

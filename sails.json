@@ -1,4 +1,5 @@
 {
+  "version": "2.0",
   "schema": 0,
   "generators": {
     "modules": {}

@@ -1,5 +1,4 @@
 var chalk = require('chalk');
-var figlet = require('figlet');
 var _ = require('lodash');
 var CLI = require('clui');
 var Spinner = CLI.Spinner;
@@ -11,31 +10,21 @@ var async = require('async');
 var sailsAPI = require('sails');
 var MAX_RECORDS_IN_MEM = 500;
 
-var welcome = 'Welcome to the FOG 2.0 schema migrator.\nYou will be guided through migrating your current database schema.'
+var welcome = 'Welcome to the FOG schema migrator.\nYou will be guided through migrating your current database schema.'
 var COMPLETED = false;
 
 var config = require('../lib/config');
+var header = require('../lib/header');
+
 var inquire = require('./lib/inquire');
 var migrations = require('./lib/migrations');
 var revision;
 
-console.log(
-  chalk.cyan(
-    figlet.textSync('FOG 2.0', { horizontalLayout: 'full' })
-  )
-);
-
-console.log();
-console.log(welcome);
-
-var printHeader = function(text) {
-    console.log();
-    console.log(chalk.yellow(text));
-}
+header.print(welcome);
 
 async.waterfall([
     function(next) {
-        printHeader("Database backup");
+        header.printSection("Database backup");
         inquire.getBackupInfo(function(answers) {
             if(!answers.backup && !answers.confirmBackup)
                 return next('No backup');
@@ -44,7 +33,7 @@ async.waterfall([
         });
     },
     function(next) {
-      printHeader("Migration");
+      header.printSection("Migration");
       var status = new Spinner('Calculating deltas...');
       var pendingText = "Deltas calculated";
       status.start();

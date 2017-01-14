@@ -18,6 +18,8 @@ var verifyDB = function(answers, next)
             console.log();
             return next(err);
         }
+
+        console.log(chalk.green("Database information verified"));
         next();
     });
 };
@@ -80,7 +82,6 @@ module.exports = {
             verifyDB(answers, function(err) {
                 if(err)
                     return module.exports.getDatabaseInfo(next);
-                console.log(chalk.green("Database information verified"));
                 answers.adapter = 'sails-mongo';
                 next(answers);
             })
