@@ -1,23 +1,20 @@
-var chalk = require('chalk');
 var _ = require('lodash');
+var async = require('async');
+var path = require('path');
+var fs = require('fs');
+
+var chalk = require('chalk');
 var CLI = require('clui');
 var Spinner = CLI.Spinner;
-var Gauge  = CLI.Gauge ;
-var Line = CLI.Line;
-var fs = require('fs');
-var path = require('path');
-var async = require('async');
-var sailsAPI = require('sails');
-var MAX_RECORDS_IN_MEM = 500;
-
-var welcome = 'Welcome to the FOG schema migrator.\nYou will be guided through migrating your current database schema.'
-var COMPLETED = false;
 
 var config = require('../lib/config');
 var header = require('../lib/header');
 
 var inquire = require('./lib/inquire');
 var migrations = require('./lib/migration');
+
+var welcome = 'Welcome to the FOG schema migrator.\nYou will be guided through migrating your current database schema.'
+var COMPLETED = false;
 var revision;
 
 header.print(welcome);
@@ -42,8 +39,6 @@ async.waterfall([
         didMigrate = true;
         status.stop();
         console.log(pendingText);
-        //pendingText = (upgrade) ? ("Revision " + fromRev + " -> " + toRev + "                  APPLYING: " + description)
-        //                        : ("Revision " + fromRev + " -> " + toRev + "                  REVERSING: " + description);
         pendingText = "Revision " + fromRev + " -> " + toRev + "\t ";
         pendingText += chalk.cyan(((upgrade) ? "APPLYING: " : "REVERSING: ") + description);
         status = new Spinner(pendingText);
@@ -52,7 +47,7 @@ async.waterfall([
         status.stop();
         console.log(pendingText);
         if (err) return next(err);
-        
+
         if(didMigrate) {
           console.log("Migration complete");
         } else {
