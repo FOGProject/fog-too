@@ -23,6 +23,24 @@ var filterPermissions = function(permissions) {
   return _.merge(sails.config.permissions, permissions);
 }
 
+var deepMap = function(obj, cb) {
+    var out = {};
+
+    Object.keys(obj).forEach(function (k) {
+      var val;
+
+      if (obj[k] !== null && typeof obj[k] === 'object') {
+        val = deepMap(obj[k], cb);
+      } else {
+        val = cb(obj[k], k);
+      }
+
+      out[k] = val;
+    });
+
+  return out;
+}
+
 module.exports = {
   attributes: {
     name: {
@@ -42,7 +60,17 @@ module.exports = {
     permissions: { 
       type: 'json',
       required: true,
-    }
+    },
+    toJSON: function () {
+      var role = this.toObject();
+      if(!role.isAdmin) return user;
+
+      // Mark all permissions as true
+      role.permissions = deepMap(sails.config.permissions, function (v, k) {
+        return true;
+      });
+      return role;
+    },
   },
   beforeCreate: function (values, next) {
     values.permissions = filterPermissions(values.permissions);
