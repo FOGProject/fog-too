@@ -1,7 +1,4 @@
-var _ = require('lodash');
 var async = require('async');
-var path = require('path');
-var fs = require('fs');
 
 var chalk = require('chalk');
 var CLI = require('clui');
