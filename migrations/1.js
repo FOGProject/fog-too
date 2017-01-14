@@ -8,7 +8,6 @@ module.exports = {
         db.collection('role').update({}, {$unset: {isCool: ""}}, next);
     },
     _meta: {
-        schema: 1,
         description: "Add an isCool flag to the Role model"
     }
 };

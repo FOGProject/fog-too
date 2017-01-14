@@ -1,7 +1,7 @@
 var async = require('async');
 var fs = require('fs');
 var path = require('path');
-var migrationsFolder = path.join(process.cwd(), 'migrations');
+var migrationsFolder = path.join(__dirname,'..', '..', '..', 'migrations');
 
 var config = require('../../lib/config');
 var database = require('../../lib/database');
@@ -30,6 +30,7 @@ module.exports = {
         for(var i = 0; i < toLoad.length; i++) {
             try {
                 revisions[i] = require(path.join(migrationsFolder, toLoad[i] + ".js"))
+                revisions[i]._meta.schema = toLoad[i];
             } catch(e) {
                 throw 'Missing migration file for schema ' + toLoad[i];
             }
