@@ -25,12 +25,7 @@
 process.chdir(__dirname);
 
 var sails = require('sails');
-var rc = require('rc');
-var _ = require('lodash');
-var userPref = require('./config.json') || {};
+var config = require('./tools/lib/config');
 
-// Start server
-var stock = rc('sails');
-var config = _.merge(userPref, stock);
-
-sails.lift(config);
+var cfg = config.getMergedSettings();
+sails.lift(cfg);

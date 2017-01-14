@@ -1,0 +1,9 @@
+{
+  "schema": 0,
+  "generators": {
+    "modules": {}
+  },
+  "hooks": {
+    "views": false
+  }
+}

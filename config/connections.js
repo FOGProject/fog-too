@@ -25,14 +25,4 @@ module.exports.connections = {
     adapter: 'sails-disk'
   },
 
-/**
-   main: {
-     adapter: 'sails-mongo',
-     host: 'localhost',
-     port: 27017,
-     //user: 'username', //optional
-     //password: 'password', //optional
-     database: 'fog' //optional
-   },
-*/
 };

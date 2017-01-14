@@ -2,14 +2,13 @@ var inquirer = require('inquirer');
 var CLI = require('clui');
 var Spinner = CLI.Spinner;
 var chalk = require('chalk');
-var database;
+var database = require('../../lib/database');
 
 var verifyDB = function(answers, next)
 {
     var status = new Spinner('Verifying database information, please wait...');
     status.start();  
-    database = require('./' + answers.adapter);
-    database.verify(answers.host, answers.port, answers.db, answers.username, answers.password, function(err) {
+    database.connect(answers.host, answers.port, answers.db, answers.username, answers.password, function(err, db) {
         status.stop();
         if(err) {
             var prefix = "MongoError: ";
@@ -25,17 +24,7 @@ var verifyDB = function(answers, next)
 
 module.exports = {
     getDatabaseInfo: function(next) {
-        var questions = [
-             {
-                name: 'adapter',
-                type: 'list',
-                message: 'What type of database server will FOG connect to?',
-                choices: [
-                    'MongoDB',
-                    'MySQL',
-                    'PostgreSQL'
-                ]
-            },           
+        var questions = [         
             {
                 name: 'host',
                 type: 'input',
@@ -92,15 +81,25 @@ module.exports = {
                 if(err)
                     return module.exports.getDatabaseInfo(next);
                 console.log(chalk.green("Database information verified"));
-                if(answers.adapter === 'MongoDB')
-                    answers.adapter = 'sails-mongo';
-
+                answers.adapter = 'sails-mongo';
                 next(answers);
             })
         });
     },
     getAdminInfo: function(next){
         var questions = [
+            {
+                name: 'email',
+                type: 'input',
+                message: 'Enter an email address for the Administrator account:',
+                validate: function( value ) {
+                    if (value.length) {
+                        return true;
+                    } else {
+                        return 'Please enter an email address';
+                    }
+                }
+            },
             {
                 name: 'password',
                 type: 'password',

@@ -1,43 +1,31 @@
-var chalk = require('chalk');
-var clear = require('clear');
+var async = require('async');
+
 var figlet = require('figlet');
-var _ = require('lodash');
+var chalk = require('chalk');
 var CLI = require('clui');
 var Spinner = CLI.Spinner;
-var Progress = CLI.Progress;
-var fs = require('fs');
-var path = require('path');
-var async = require('async');
-var forge = require('node-forge');
-var rsa = forge.pki.rsa;
 
+var config = require('../lib/config');
 var inquire = require('./lib/inquire');
-var genSecret = require('./lib/generateSecret');
-
-var configFilePath = path.join(process.cwd(), 'config.json');
-
-var configFile = require(configFilePath) || {};
+var schema = require('./lib/schema');
+var secure = require('./lib/secure');
 
 var welcome = 'Welcome to the FOG 2.0 installer.\nYou will be guided through configuring your new server for production.'
 var COMPLETED = false;
-
-var config = {};
-
-
-clear();
-console.log(
-  chalk.cyan(
-    figlet.textSync('FOG 2.0', { horizontalLayout: 'full' })
-  )
-);
-
-console.log();
-console.log(welcome);
+var payload = {};
 
 var printHeader = function(text) {
     console.log();
     console.log(chalk.yellow(text));
 }
+
+console.log(
+  chalk.cyan(
+    figlet.textSync('FOG 2.0', { horizontalLayout: 'full' })
+  )
+);
+console.log();
+console.log(welcome);
 
 async.waterfall([
     function(next) {
@@ -46,26 +34,26 @@ async.waterfall([
             if(!answers.username.length)
                 delete answers.username;
 
-            config.connections = config.connections || {};
-            config.connections.main = answers;
+            payload.connections = payload.connections || {};
+            payload.connections.main = answers;
             next();
         });
     },
     function(next) {
         printHeader("Administrator account configuration");
         inquire.getAdminInfo(function(answers) {
-            config.admin = answers;
+            payload.admin = answers;
             next();
         });       
     },
     function(next) {
         printHeader("Webserver configuration");
         inquire.getWebserverInfo(function(answers) {
-            config.port = answers.port;
-            config.host = answers.host;
+            payload.port = answers.port;
+            payload.host = answers.host;
             delete answers.port;
             delete answers.host;
-            config.webserver = answers;
+            payload.webserver = answers;
             next();
         });       
     },
@@ -73,25 +61,25 @@ async.waterfall([
         printHeader("Securing installation");
         var status = new Spinner('Generating session secret');
         status.start();  
-        config.session = {};
-        config.session.secret = genSecret();
+        payload.session = {};
+        payload.session.secret = secure.generateSecret();
         status.stop();
         console.log("Session secret generated");
 
         var status = new Spinner('Generating JWT secret');
         status.start();  
-        config.auth = {};
-        config.auth.jwt = {};
-        config.auth.jwt.secret = genSecret();
+        payload.auth = {};
+        payload.auth.jwt = {};
+        payload.auth.jwt.secret = secure.generateSecret();
         status.stop();
         console.log("JWT secret generated");
 
         var status = new Spinner('Generating key pair');
-        status.start();  
-        rsa.generateKeyPair({bits: 4096, workers: -1}, function(err, keypair) {
-            // keypair.privateKey, keypair.publicKey
+        status.start();
+        secure.generateKeypair(function(err, keypair) {
             status.stop();
-            console.log("Key pair generated");
+            if (err) return next("Failed to generate keypair: " + err);
+            console.log("Keypair generated");
             next();
         });
     },
@@ -99,24 +87,30 @@ async.waterfall([
         printHeader("Applying configuration");
         var status = new Spinner('Saving configuration');
         status.start();  
-        var toWrite = _.merge(configFile, config);
+        var toWrite = JSON.parse(JSON.stringify(payload)); // quick deep clone
         delete toWrite.admin;
-
-        fs.writeFile (configFilePath, JSON.stringify(toWrite, null, 2), function(err) {
+        config.overlayPrefs(toWrite);
+        config.savePrefs(function(err) {
             status.stop();
-            if(err) {
-                console.log(chalk.bgRed("--> Failed to save configuration: " + err));
-                return next(err);
-            }
-            console.log("Configuration saved");
+            if(err) return next("Failed to save configuration: " + err);
             next();
         });
     },
+    function(next) {
+        var status = new Spinner('Applying database schema');
+        status.start();  
+        schema.generate(payload.admin.password, payload.admin.email, function(err) {
+            status.stop();
+            if(err) return next("Failed to apply database schema: " + err);
+            console.log("Database schema applied");
+            next();
+        });
+    },   
 ], function (err, result) {
+    if(err) console.log(chalk.bgRed(err));
     COMPLETED = true;
+    process.exit();
 });
-
-
 
 (function wait () {
    if (!COMPLETED) setTimeout(wait, 1000);

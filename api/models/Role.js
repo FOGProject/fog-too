@@ -34,6 +34,11 @@ module.exports = {
       collection: 'User',
       via: 'role',
     },
+    isAdmin: {
+      type: 'boolean',
+      required: true,
+      defaultsTo: false,
+    },
     permissions: { 
       type: 'json',
       required: true,

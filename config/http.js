@@ -23,16 +23,6 @@ module.exports.http = {
 
   middleware: {
 
-    disablePoweredBy: function(request, response, next) {
-      var expressApp = sails.hooks.http.app;
-      expressApp.disable('x-powered-by');
-      next();
-    },
-    trustProxy: function(request, response, next) {
-      var expressApp = sails.hooks.http.app;
-      expressApp.enable('trust proxy');
-      next();
-    },
   /***************************************************************************
   *                                                                          *
   * The order in which middleware should be run for HTTP request. (the Sails *
@@ -40,7 +30,7 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-     order: [
+    // order: [
     //   'startRequestTimer',
     //   'cookieParser',
     //   'session',
@@ -50,15 +40,13 @@ module.exports.http = {
     //   'compress',
     //   'methodOverride',
     //   'poweredBy',
-         'disablePoweredBy',
-         'trustProxy',
     //   '$custom',
     //   'router',
     //   'www',
     //   'favicon',
     //   '404',
     //   '500'
-     ],
+    // ],
 
   /****************************************************************************
   *                                                                           *
