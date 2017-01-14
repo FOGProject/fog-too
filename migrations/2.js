@@ -2,14 +2,10 @@
 
 module.exports = {
     up: function(db, logger, next) {
-        setTimeout(function () {
-            db.collection('role').update({}, {$set: {isNeat: true}}, next);
-        }, 5000)
+        db.collection('role').update({}, {$set: {isNeat: true}}, next);
     },
     down: function(db, logger, next) {
-        setTimeout(function () {
-            db.collection('role').update({}, {$unset: {isNeat: ""}}, next);
-        }, 5000)
+        db.collection('role').update({}, {$unset: {isNeat: ""}}, next);
     },
     _meta: {
         schema: 2,

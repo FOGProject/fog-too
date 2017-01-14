@@ -17,7 +17,7 @@ var config = require('../lib/config');
 var header = require('../lib/header');
 
 var inquire = require('./lib/inquire');
-var migrations = require('./lib/migrations');
+var migrations = require('./lib/migration');
 var revision;
 
 header.print(welcome);
@@ -51,6 +51,8 @@ async.waterfall([
       }, function(err) {
         status.stop();
         console.log(pendingText);
+        if (err) return next(err);
+        
         if(didMigrate) {
           console.log("Migration complete");
         } else {
