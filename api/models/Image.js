@@ -11,9 +11,6 @@ module.exports = {
       type: 'string',
       required: true
     },
-    directory: {
-      type: 'string'
-    },
     writeLock: {
       type: 'boolean',
       defaultsTo: false,
@@ -22,6 +19,7 @@ module.exports = {
     readers: {
       type: 'integer',
       defaultsTo: 0,
+      min: 0,
       required: true
     },
     hosts: {

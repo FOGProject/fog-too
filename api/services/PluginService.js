@@ -1,3 +1,5 @@
+'use strict;'
+
 var path = require('path');
 var fs = require('fs');
 var rmdir = require('rimraf');
@@ -57,7 +59,7 @@ module.exports = {
             return;   
           }
           sails.log.info("Registering [" + fnName + "] on event [" + key + "] for [" + pluginName + "]");
-          BusService.subscribe(key, fnc);
+          // BusService.subscribe(key, fnc);
           cb();
         }, function (err) {
           next(err);

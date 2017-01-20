@@ -38,7 +38,6 @@
     "node-uuid": "^1.4.7",
     "node-wol": "^0.1.1",
     "progress-stream": "^1.2.0",
-    "pubsub-js": "^1.5.4",
     "rc": "1.0.1",
     "recursive-copy": "^2.0.5",
     "reflect-metadata": "^0.1.2",
@@ -55,7 +54,8 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/integration/**/*.test.js"
   },
   "main": "app.js",
   "repository": {
@@ -63,5 +63,13 @@
     "url": "git://github.com/anonymous node/sails user/fog-too.git"
   },
   "author": "FOG Project",
-  "license": "GPL v3"
+  "license": "GPL v3",
+  "devDependencies": {
+    "barrels": "^1.6.4",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "sails-memory": "^0.10.7",
+    "should": "^11.1.2",
+    "supertest": "^2.0.1"
+  }
 }

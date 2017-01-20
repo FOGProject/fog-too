@@ -1,3 +1,5 @@
+'use strict;'
+
 var path = require('path');
 var fs = require('fs');
 var ObjectId = require('mongodb').ObjectID;
@@ -5,45 +7,6 @@ var progress = require('progress-stream');
 var imageDir = path.join(__dirname, '../../images');
 
 module.exports = {
-  get: function(id, next) {  
-    Image.findOne({id: id}).populateAll().exec(function(err, result) {
-      if(err) return next(err);
-      next(null, result);
-    });
-  },
-  search: function(query, next) {  
-    Image.find(query).populateAll().exec(function(err, result) {
-      if(err) return next(err);
-      next(null, result);
-    });
-  },  
-  getAll: function(next) {
-    Image.find().populateAll().exec(function(err, result) {
-      if(err) return next(err);
-      next(null, result);
-    });
-  },
-  create: function(params, next) {
-    Image.create(params).exec(function(err, result) {
-      if(err) return next(err);
-      BusService.publish('image.create', result);
-      next(null, result);
-    });
-  },
-  update: function(id, params, next) {
-    Image.update({id: id}, params).exec(function(err, result) {
-      if(err) return next(err);
-      BusService.publish('image.update', result);
-      next(null, result);
-    });
-  },  
-  destroy: function(id, next) {
-    Image.destroy({id: id}).exec(function(err, result) {
-      if(err) return next(err);
-      BusService.publish('image.destroy', result);
-      next(null, result);
-    });
-  },
   stream: function(id, partition, target, next) {
     ImageService.aquireReadLock(id, function(err, image) {
       if(err) return next(err);

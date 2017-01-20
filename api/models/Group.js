@@ -14,6 +14,7 @@ module.exports = {
     priority: {
       type: 'integer',
       defaultsTo: 0,
+      min: 0,
       required: true
     },
     hosts: {

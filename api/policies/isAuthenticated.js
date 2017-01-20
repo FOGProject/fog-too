@@ -29,21 +29,21 @@ module.exports = function(req, res, next) {
   if (req.header('authorization')) {
     // If one exists, attempt to get the header data
     var token = req.header('authorization').split('Bearer ')[1];
-    // If there's nothing after "Bearer", just redirect to login
+    // If there's nothing after "Bearer", send a 401
     if (!token) return res.send(401);
     // If there is something, attempt to parse it as a JWT token
     return jwt.verify(token, jwtConfig.secret, function(err, payload) {
       // If there's an error verifying the token (e.g. it's invalid or expired),
-      // redirect to the login page.
+      // send a 401.
       if (err) {
         return res.send(401);
       }
-      // If there's no user ID in the token, redirect to login
-      if (!payload.user) {return res.send(401);}
+      // If there's no user ID in the token, send a 401
+      if (!payload.user) return res.send(401);
       // Otherwise try to look up that user
       UserService.get(payload.user, function(err, user) {
         if (err) return res.negotiate(err);
-        // If the user can't be found, redirect to the login page
+        // If the user can't be found, send a 401
         if (!user) return res.send(401);
         // Otherwise save the user object on the request (i.e. "log in") and continue
         req.user = user;

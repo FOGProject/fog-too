@@ -50,7 +50,8 @@ module.exports = {
     },
     users: {
       collection: 'User',
-      via: 'role',
+      via: 'roles',
+      dominant: true
     },
     isAdmin: {
       type: 'boolean',
@@ -61,24 +62,23 @@ module.exports = {
       type: 'json',
       required: true,
     },
-    toJSON: function () {
-      var role = this.toObject();
-      if(!role.isAdmin) return user;
-
-      // Mark all permissions as true
-      role.permissions = deepMap(sails.config.permissions, function (v, k) {
-        return true;
-      });
-      return role;
-    },
   },
   beforeCreate: function (values, next) {
-    values.permissions = filterPermissions(values.permissions);
+    if (values.isAdmin) {
+      values.permissions = deepMap(sails.config.permissions, function (v, k) { return true; });
+    }
+    else {
+      values.permissions = filterPermissions(values.permissions);
+    }
+    
     next();
   },
   beforeUpdate: function (values, next) {
-    if(!values.hasOwnProperty('permissions')) return next();
-    values.permissions = filterPermissions(values.permissions);
+    if(values.hasOwnProperty('permissions') && !values.isAdmin)
+      values.permissions = filterPermissions(values.permissions);
+    else if(values.isAdmin)
+      values.permissions = deepMap(sails.config.permissions, function (v, k) { return true; });
+
     next();
   }
 };

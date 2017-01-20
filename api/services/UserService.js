@@ -1,50 +1,21 @@
+'use strict;'
+
 module.exports = { 
-  get: function(id, next) {  
-    User.findOne({id: id}).populateAll().exec(function(err, result) {
-      if(err) return next(err);
-      next(null, result);
-    });
-  },
-  search: function(query, next) {  
-    User.find(query).populateAll().exec(function(err, result) {
-      if(err) return next(err);
-      next(null, result);
-    });
-  },  
-  getAll: function(next) {
-    User.find().populateAll().exec(function(err, result) {
-      if(err) return next(err);
-      next(null, result);
-    });
-  },
-  create: function(params, next) {
-    User.create(params).exec(function(err, result) {
-      if(err) return next(err);
-      BusService.publish('user.create', result);
-      next(null, result);
-    });
-  },
-  update: function(id, params, next) {
-    User.update({id: id}, params).exec(function(err, result) {
-      if(err) return next(err);
-      BusService.publish('user.update', result);
-      next(null, result);
-    });
-  },  
-  destroy: function(id, next) {
-    User.destroy({id: id}).exec(function(err, result) {
-      if(err) return next(err);
-      BusService.publish('user.destroy', result);
-      next(null, result);
-    });
-  },
   authenticate: function(username, password, next) {  
+    next = (typeof next !== 'function') ? function() {} : next;
+    var errMsg = 'Invalid credentials';
+    // Ensure the username is a string, contains characters, and is also alphanumeric
+    if(typeof username !== 'string' || username.length === 0 || !username.match(/^[a-z0-9]+$/i))
+      return next(errMsg);
+    if(typeof password !== 'string' || password.length == 0)
+      return next(errMsg);    
+
     User.findOne({username: username}).populateAll().exec(function(err, result) {
       if(err) return next(err);
-      if(!result) return('Could not find user');
+      if(!result) return next(errMsg);
       result.comparePassword(password, function(err, isMatch) {
         if(err) return next(err);
-        if(!isMatch) return next();
+        if(!isMatch) return next(errMsg);
         next(null, result);
       })
     });

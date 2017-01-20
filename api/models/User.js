@@ -4,6 +4,7 @@
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
+var _ = require('lodash'); // Force an upgrade of the lodash module as sails runs v3, and we need v4 api
 var bcrypt = require('bcryptjs');
 var hashPassword = function(password, next) {
   bcrypt.hash(password, sails.config.auth.bcrypt.rounds, function(err, hash) {
@@ -12,10 +13,23 @@ var hashPassword = function(password, next) {
   });
 };
 
+var concatRoles = function(roles) {
+  if(roles === undefined || roles.length == 0) return {};
+  var permissions = {};
+  for(var i = 0; i < roles.length; i++) {
+    permissions = _.mergeWith(permissions, roles[i].permissions, function(objValue, srcValue) {
+      return (objValue) ? objValue : srcValue;
+    });
+  }
+
+  return permissions;
+}
+
 module.exports = {
   attributes: {
     username: {
       type: 'string',
+      alphanumeric: true,
       unique: true,
       required: true
     },
@@ -29,14 +43,14 @@ module.exports = {
       required: true,
       minLength: 8
     },
-    role: {
-      model: 'Role',
-      required: true
+    roles: {
+      collection: 'Role',
+      via: 'users'
     },
-
     toJSON: function () {
       var user = this.toObject();
       delete user.password;
+      user.permissions = concatRoles(user.roles);
       return user;
     },
     comparePassword: function(candidatePassword, next) {

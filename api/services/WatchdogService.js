@@ -1,3 +1,5 @@
+'use strict;'
+
 var running = false;
 var delay = 1 * 60 * 1000;
 
@@ -8,16 +10,16 @@ module.exports = {
         }
         running = true;
         sails.log.info("Starting watchdog");
-        BusService.publish('watchdog.start');
+        sails.emit('fog:watchdog:start');
         async.forever(
             function(next) {
-                BusService.publish('watchdog.tick');
+                sails.emit('fog:watchdog:tick');
                 setTimeout(next, delay)
             },
             function(err) {
                 running = false;
+                sails.emit('fog:watchdog:crash');
                 sails.log.err("Watchdog crashed, err: " + err);
-                BusService.publish('watchdog.crash');
                 WatchdogService.initialize();
             }
         )

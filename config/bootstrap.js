@@ -11,8 +11,5 @@
 
 module.exports.bootstrap = function(cb) {
   WatchdogService.initialize();
-  PluginService.initialize(function(err) {
-    BusService.publish('server.load', null);
-    cb(err);
-  });
+  PluginService.initialize(cb);
 };

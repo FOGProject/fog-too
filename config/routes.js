@@ -1,86 +1,86 @@
 module.exports.routes = {
 
-  '/': function(req, res) { return res.send('FOG Backend'); },
+  '/api': function(req, res) { return res.send('{message: "FOG API Backend"}'); },
 
   /**
    * Auth API
    */
-  'post /auth/token': 'AuthController.issueToken',
-  'post /auth/login': 'AuthController.login',
-  'post /auth/logout': 'AuthController.logout',
+  'post /api/auth/token': 'AuthController.issueToken',
+  'post /api/auth/login': 'AuthController.login',
+  'post /api/auth/logout': 'AuthController.logout',
 
   /**
    * User API
    */
-  'get /user': 'UserController.list',
-  'get /user/search': 'UserController.search',
-  'get /user/:id': 'UserController.find',
-  'post /user': 'UserController.create',
-  'put /user': 'UserController.update',
-  'delete /user': 'UserController.destroy',  
+  'get /api/user': 'UserController.list',
+  'get /api/user/search': 'UserController.search',
+  'get /api/user/:id': 'UserController.find',
+  'post /api/user': 'UserController.create',
+  'put /api/user': 'UserController.update',
+  'delete /api/user': 'UserController.destroy',  
 
   /**
    * Role API
    */
-  'get /role': 'RoleController.list',
-  'get /role/search': 'RoleController.search',
-  'get /role/:id': 'RoleController.find',
-  'post /role': 'RoleController.create',
-  'put /role': 'RoleController.update',
-  'delete /role': 'RoleController.destroy',  
-  'put /role/:id/assign': 'RoleController.assign',
+  'get /api/role': 'RoleController.list',
+  'get /api/role/search': 'RoleController.search',
+  'get /api/role/:id': 'RoleController.find',
+  'post /api/role': 'RoleController.create',
+  'put /api/role': 'RoleController.update',
+  'delete /api/role': 'RoleController.destroy',  
+  'put /api/role/:id/assign': 'RoleController.assign',
 
   /**
    * Host API
    */
-  'get /host': 'HostController.list',
-  'get /host/search': 'HostController.search',
-  'get /host/:id': 'HostController.find',
-  'post /host': 'HostController.create',
-  'put /host': 'HostController.update',
-  'delete /host': 'HostController.destroy',
+  'get /api/host': 'HostController.list',
+  'get /api/host/search': 'HostController.search',
+  'get /api/host/:id': 'HostController.find',
+  'post /api/host': 'HostController.create',
+  'put /api/host': 'HostController.update',
+  'delete /api/host': 'HostController.destroy',
 
   /**
    * Group API
    */
-  'get /group': 'GroupController.list',
-  'get /group/search': 'GroupController.search',
-  'get /group/:id': 'GroupController.find',
-  'post /group': 'GroupController.create',
-  'put /group': 'GroupController.update',
-  'delete /group': 'GroupController.destroy',
-  'put /group/:id/register': 'GroupController.registerHost',
-  'put /group/:id/unregister': 'GroupController.unregisterHost',
+  'get /api/group': 'GroupController.list',
+  'get /api/group/search': 'GroupController.search',
+  'get /api/group/:id': 'GroupController.find',
+  'post /api/group': 'GroupController.create',
+  'put /api/group': 'GroupController.update',
+  'delete /api/group': 'GroupController.destroy',
+  'put /api/group/:id/register': 'GroupController.registerHost',
+  'put /api/group/:id/unregister': 'GroupController.unregisterHost',
 
   /**
    * Image API
    */
-  'get /image': 'ImageController.list',
-  'get /image/search': 'ImageController.search',
-  'get /image/:id': 'ImageController.find',
-  'post /image': 'ImageController.create',
-  'put /image': 'ImageController.update',
-  'delete /image': 'ImageController.destroy',
-  'get /image/:id/deploy/:partition': 'ImageController.deploy',
-  'put /image/:id/capture/:partition': 'ImageController.capture',
+  'get /api/image': 'ImageController.list',
+  'get /api/image/search': 'ImageController.search',
+  'get /api/image/:id': 'ImageController.find',
+  'post /api/image': 'ImageController.create',
+  'put /api/image': 'ImageController.update',
+  'delete /api/image': 'ImageController.destroy',
+  'get /api/image/:id/deploy/:partition': 'ImageController.deploy',
+  'put /api/image/:id/capture/:partition': 'ImageController.capture',
 
   /**
    * Workflow API
    */
-  'get /workflow': 'WorkflowController.list',
-  'get /workflow/search': 'WorkflowController.search',
-  'get /workflow/:id': 'WorkflowController.find',
-  'post /workflow': 'WorkflowController.create',
-  'put /workflow': 'WorkflowController.update',
-  'delete /workflow': 'WorkflowController.destroy',
+  'get /api/workflow': 'WorkflowController.list',
+  'get /api/workflow/search': 'WorkflowController.search',
+  'get /api/workflow/:id': 'WorkflowController.find',
+  'post /api/workflow': 'WorkflowController.create',
+  'put /api/workflow': 'WorkflowController.update',
+  'delete /api/workflow': 'WorkflowController.destroy',
 
   /**
    * Task API
    */
-  'get /task': 'TaskController.list',
-  'get /task/search': 'TaskController.search',
-  'get /task/:id': 'TaskController.find',
-  'post /task': 'TaskController.create',
-  'put /task': 'TaskController.update',
-  'delete /task': 'TaskController.destroy',
+  'get /api/task': 'TaskController.list',
+  'get /api/task/search': 'TaskController.search',
+  'get /api/task/:id': 'TaskController.find',
+  'post /api/task': 'TaskController.create',
+  'put /api/task': 'TaskController.update',
+  'delete /api/task': 'TaskController.destroy',
 };
