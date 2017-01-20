@@ -13,5 +13,11 @@ module.exports = [
     "name": "ToDelete",
     "writeLock": false,
     "readers": 0    
+  },
+  {
+    "name": "ToHostAssociate"
+  },
+  {
+    "name": "ToHostUnassociate"
   }, 
 ]

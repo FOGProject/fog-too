@@ -20,7 +20,7 @@ module.exports = {
     hosts: {
       collection: 'host',
       via: 'groups',
-      dominant: true
+      dominant: true,
     },
     image: {
       model: 'Image'

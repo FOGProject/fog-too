@@ -15,7 +15,7 @@ var validateWrapperParameters = function (parent, child, viaAttribute, parentId)
           || typeof child.findOne !== 'function')
     return 'Child parameter is not a model';
   if(typeof viaAttribute !== 'string' || viaAttribute.length === 0)
-    return 'Invalid viaAttribute';
+    return 'Invalid via attribute';
   if(typeof parentId === 'undefined' || parentId === null)
     return 'Invalid parentId';
 
@@ -23,16 +23,17 @@ var validateWrapperParameters = function (parent, child, viaAttribute, parentId)
 }
 
 var manyAssociationWrapper = function(parent, child, viaAttribute, parentId, childIds, add, next) {
+  next = (typeof next !== 'function') ? function() {} : next;
   var validationErr = validateWrapperParameters(parent, child, viaAttribute, parentId);
   if(validationErr) return next(validationErr);
-  next = (typeof next !== 'function') ? function() {} : next;
-
+  var pModel;
   async.waterfall([
     // Verify that the parent exists
     function(cb) {
-      parent.findOne({id: id}).exec(function(err, pResult) {
+      parent.findOne({id: parentId}).exec(function(err, pResult) {
         if(err) return cb(err);
-        if(!pResult) return cb('Could not find ' + parent.identity + ' with that id');
+        if(!pResult) return cb('Invalid parent id');
+        pModel = pResult;
         cb();
       });
     },
@@ -41,14 +42,20 @@ var manyAssociationWrapper = function(parent, child, viaAttribute, parentId, chi
       async.each(childIds, function(childId, nCb) {
         child.findOne({id: childId}).exec(function(err, cResult) {
           if(err) return nCb(err);
-          if(!cResult) return nCb('Could not find ' + child.identity + ' with id ' + childId);
+          if(!cResult) return nCb('Invalid child with id ' + childId);
           nCb();
         });
       }, cb);
     },
     // Update the parent model
     function(cb) {
-      pResult.save(function(err) {
+      if(!pModel[viaAttribute]) return next('Invalid via attribute');
+      if(add)
+        pModel[viaAttribute].add(childIds);
+      else
+        pModel[viaAttribute].remove(childIds);
+      
+      pModel.save(function(err) {
         if(err) return cb(err);
         cb();
       });
@@ -60,17 +67,17 @@ var manyAssociationWrapper = function(parent, child, viaAttribute, parentId, chi
 }
 
 var singleAssociationWrapper = function(parent, child, viaAttribute, parentId, childId, next) {
+  next = (typeof next !== 'function') ? function() {} : next;
   var validationErr = validateWrapperParameters(parent, child, viaAttribute, parentId);
   if(validationErr) return next(validationErr);
-  next = (typeof next !== 'function') ? function() {} : next;
+  if(!parent.definition.hasOwnProperty(viaAttribute)) return next('Invalid via attribute');
   if (typeof childId === 'undefined') childId = null;
-
   async.waterfall([
     // Verify that the parent exists
     function(cb) {
-      parent.findOne({id: id}).exec(function(err, pResult) {
+      parent.findOne({id: parentId}).exec(function(err, pResult) {
         if(err) return cb(err);
-        if(!pResult) return cb('Could not find ' + parent.identity + ' with that id');
+        if(!pResult) return cb('Invalid parent id');
         cb();
       });
     },
@@ -81,7 +88,7 @@ var singleAssociationWrapper = function(parent, child, viaAttribute, parentId, c
       if (childId === null) return cb();
       child.findOne({id: childId}).exec(function(err, cResult) {
         if(err) return cb(err);
-        if(!cResult) return cb('Could not find ' + child.identity + ' with id ' + childId);
+        if(!cResult) return cb('Invalid child id');
         cb();
       });
     },
@@ -108,6 +115,6 @@ module.exports = {
     manyAssociationWrapper(parent, child, viaAttribute, parentId, childIds, false, next);
   },
   setSingle: function(parent, child, viaAttribute, parentId, childId, next) {
-    singleAssociationWrapper(parent, child, viaAttribute, parentId, childIds, next);
+    singleAssociationWrapper(parent, child, viaAttribute, parentId, childId, next);
   }
 };
