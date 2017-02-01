@@ -9,7 +9,6 @@ module.exports = {
       return next(errMsg);
     if(typeof password !== 'string' || password.length == 0)
       return next(errMsg);    
-
     User.findOne({username: username}).populateAll().exec(function(err, result) {
       if(err) return next(err);
       if(!result) return next(errMsg);

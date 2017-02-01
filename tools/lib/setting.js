@@ -22,7 +22,7 @@ module.exports = {
             next(null, setting.value);
         });           
     },
-    delete: function(db, name, next) {
+    destroy: function(db, name, next) {
         next = (typeof next !== 'function') ? function() {} : next;
         db.collection('setting').findOneAndDelete({name:name}, function(err) {
             if (err) return next(err);

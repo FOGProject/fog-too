@@ -50,7 +50,7 @@ module.exports.policies = {
     capture: ['isAuthenticated', 'imageCapture'],
   }, 
 
-   RoleController: {
+  RoleController: {
     list: ['isAuthenticated', 'roleRead'],
     find: ['isAuthenticated', 'roleRead'],
     search: ['isAuthenticated', 'roleRead'],
@@ -62,6 +62,7 @@ module.exports.policies = {
 
   UserController: {
     list: ['isAuthenticated', 'userRead'],
+    listMe: ['isAuthenticated'],
     find: ['isAuthenticated', 'userRead'],
     search: ['isAuthenticated', 'userRead'],
     create: ['isAuthenticated', 'userCreate'],

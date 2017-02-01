@@ -14,6 +14,7 @@ module.exports.routes = {
    */
   'get /api/user': 'UserController.list',
   'get /api/user/search': 'UserController.search',
+  'get /api/user/me': 'UserController.listMe',  
   'get /api/user/:id': 'UserController.find',
   'post /api/user': 'UserController.create',
   'put /api/user': 'UserController.update',

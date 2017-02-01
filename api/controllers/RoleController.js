@@ -6,28 +6,28 @@
 
 module.exports = {
 	list: function(req, res) {
-        RoleService.getAll(function(err, result) {
+        Role.find().exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },
     find: function(req, res) {
         var id = req.param('id');
-        RoleService.get(id, function(err, result) {
+        Role.find({id: id}).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },
     search: function(req, res) {
         var query = req.query;
-        RoleService.search(query, function(err, result) {
+        Role.find(query, function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },   
     create: function(req, res) {
         var params = req.params.all();
-        RoleService.create(params, function(err, result) {
+        Role.create(params).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
@@ -36,14 +36,14 @@ module.exports = {
         var id = req.param('id');
         var params = req.params.all();
         params['id'] = undefined;
-        RoleService.update(id, params, function(err, result) {
+        Role.update({id: id}, params).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },    
     destroy: function(req, res) {
         var id = req.param('id');
-        RoleService.destroy(id, function(err) {
+        Role.destroy({id: id}).exec(function(err) {
             if (err) return res.serverError(err);
             res.json();
         });

@@ -6,28 +6,31 @@
 
 module.exports = {
 	list: function(req, res) {
-        UserService.getAll(function(err, result) {
+        User.find().exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },
+    listMe: function(req, res) {
+        res.json(req.user);
+    },
     find: function(req, res) {
         var id = req.param('id');
-        UserService.get(id, function(err, result) {
+        User.find({id: id}).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },
     search: function(req, res) {
         var query = req.query;
-        UserService.search(query, function(err, result) {
+        User.find(query, function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },   
     create: function(req, res) {
         var params = req.params.all();
-        UserService.create(params, function(err, result) {
+        User.create(params).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
@@ -36,14 +39,14 @@ module.exports = {
         var id = req.param('id');
         var params = req.params.all();
         params['id'] = undefined;
-        UserService.update(id, params, function(err, result) {
+        User.update({id: id}, params).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },    
     destroy: function(req, res) {
         var id = req.param('id');
-        UserService.destroy(id, function(err) {
+        User.destroy({id: id}).exec(function(err) {
             if (err) return res.serverError(err);
             res.json();
         });

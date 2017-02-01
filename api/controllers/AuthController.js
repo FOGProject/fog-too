@@ -1,7 +1,7 @@
 /**
  * AuthController
  *
- * @description :: Server-side logic for managing Tasks
+ * @description :: Server-side logic for managing Authentication
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var jwt = require('jsonwebtoken');
@@ -15,7 +15,7 @@ module.exports = {
             if (err) return res.negotiate(err);
             if (!user) return res.badRequest('Invalid credentials.');
             var token = jwt.sign({user: user.id}, jwtConfig.secret, {expiresIn: jwtConfig.expiresIn});
-            return res.json(token);
+            return res.json({token: token});
         });        
     },
     login: function(req, res) {

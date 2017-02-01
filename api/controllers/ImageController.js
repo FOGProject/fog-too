@@ -7,28 +7,28 @@
 
 module.exports = {
 	list: function(req, res) {
-        ImageService.getAll(function(err, result) {
+        Image.find().exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },
     find: function(req, res) {
         var id = req.param('id');
-        ImageService.get(id, function(err, result) {
+        Image.find({id: id}).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },
     search: function(req, res) {
         var query = req.query;
-        ImageService.search(query, function(err, result) {
+        Image.find(query, function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },   
     create: function(req, res) {
         var params = req.params.all();
-        ImageService.create(params, function(err, result) {
+        Image.create(params).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
@@ -37,14 +37,14 @@ module.exports = {
         var id = req.param('id');
         var params = req.params.all();
         params['id'] = undefined;
-        ImageService.update(id, params, function(err, result) {
+        Image.update({id: id}, params).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);
         });
     },    
     destroy: function(req, res) {
         var id = req.param('id');
-        ImageService.destroy(id, function(err) {
+        Role.destroy({id: id}).exec(function(err) {
             if (err) return res.serverError(err);
             res.json();
         });
