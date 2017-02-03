@@ -1,5 +1,5 @@
 module.exports = function(req, res, next) {
   if(_.get(req, "user.permissions.stock.host.update"))
     return next();
-  res.send(401);
+  res.forbidden("Host update permission required");
 };

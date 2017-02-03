@@ -27,15 +27,25 @@ module.exports = {
     },   
     create: function(req, res) {
         var params = req.params.all();
+        // Prevent bypassing association permissions
+        if (params.groups) delete params.groups;
+        if (params.workflows) delete params.workflows;
+
         Host.create(params).exec(function(err, result) {
             if (err) return res.serverError(err);
-            res.json(result);
+            res.location('/api/host/'+result.id);
+            res.created(result);
         });
     },
     update: function(req, res) {
         var id = req.param('id');
+        if(!id) return res.badRequest('No id provided');
+        
         var params = req.params.all();
-        params['id'] = undefined;
+        // Prevent bypassing association permissions
+        if (params.groups) delete params.groups;
+        if (params.workflows) delete params.workflows;
+        
         Host.update({id: id}, params).exec(function(err, result) {
             if (err) return res.serverError(err);
             res.json(result);

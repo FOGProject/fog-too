@@ -30,7 +30,8 @@ module.exports = {
         var params = req.params.all();
         Group.create(params).exec(function(err, result) {
             if (err) return res.serverError(err);
-            res.json(result);
+            res.location('/api/group/'+result.id);
+            res.created(result);
         });
     },
     update: function(req, res) {
@@ -52,17 +53,17 @@ module.exports = {
     registerHost: function(req, res) {
         var id = req.param('id');
         var hostIds = req.param('hostIds');
-        GroupService.registerHost(id, hostIds, function(err, result) {
+        AssociationService.assignMany(Group, Host, "hosts", id, hostIds, function(err) {
             if (err) return res.serverError(err);
-            res.json(result);
-        });       
+            res.json();
+        });    
     },
     unregisterHost: function(req, res) {
         var id = req.param('id');
         var hostIds = req.param('hostIds');
-        GroupService.unregisterHost(id, hostIds, function(err, result) {
+        AssociationService.unassignMany(Group, Host, "hosts", id, hostIds, function(err) {
             if (err) return res.serverError(err);
-            res.json(result);
+            res.json();
         });       
     },
 };

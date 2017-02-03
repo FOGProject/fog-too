@@ -30,7 +30,8 @@ module.exports = {
         var params = req.params.all();
         Task.create(params).exec(function(err, result) {
             if (err) return res.serverError(err);
-            res.json(result);
+            res.location('/api/task/'+result.id);
+            res.created(result);
         });
     },
     update: function(req, res) {

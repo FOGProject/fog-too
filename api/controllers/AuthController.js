@@ -11,6 +11,9 @@ module.exports = {
     issueToken: function(req, res) {
         var username = req.param('username');
         var password = req.param('password');
+        if(!username) return res.badRequest('Expected username');
+        if(!password) return res.badRequest('Expected password');
+
         UserService.authenticate(username, password, function(err, user) {
             if (err) return res.negotiate(err);
             if (!user) return res.badRequest('Invalid credentials.');
@@ -21,6 +24,9 @@ module.exports = {
     login: function(req, res) {
         var username = req.param('username');
         var password = req.param('password');
+        if(!username) return res.badRequest('Expected username');
+        if(!password) return res.badRequest('Expected password');
+
         UserService.authenticate(username, password, function(err, user) {
             if (err) return res.negotiate(err);
             if (!user) return res.badRequest('Invalid credentials.');

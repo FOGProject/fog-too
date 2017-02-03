@@ -30,7 +30,8 @@ module.exports = {
         var params = req.params.all();
         Image.create(params).exec(function(err, result) {
             if (err) return res.serverError(err);
-            res.json(result);
+            res.location('/api/image/'+result.id);
+            res.created(result);
         });
     },
     update: function(req, res) {

@@ -30,6 +30,7 @@ module.exports.routes = {
   'put /api/role': 'RoleController.update',
   'delete /api/role': 'RoleController.destroy',  
   'put /api/role/:id/assign': 'RoleController.assign',
+  'put /api/role/:id/unassign': 'RoleController.unassign',
 
   /**
    * Host API

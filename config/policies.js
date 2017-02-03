@@ -57,7 +57,8 @@ module.exports.policies = {
     create: ['isAuthenticated', 'roleCreate'],
     update: ['isAuthenticated', 'roleUpdate'],
     destroy: ['isAuthenticated', 'roleDestroy'],
-    assign: ['isAuthenticated', 'roleAssign']
+    assign: ['isAuthenticated', 'roleAssign'],
+    unassign: ['isAuthenticated', 'roleAssign']
   },
 
   UserController: {
