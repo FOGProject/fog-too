@@ -15,6 +15,7 @@ module.exports = {
         if(!password) return res.badRequest('Expected password');
 
         UserService.authenticate(username, password, function(err, user) {
+            if (err === 'Invalid credentials') return res.badRequest(err);
             if (err) return res.negotiate(err);
             if (!user) return res.badRequest('Invalid credentials.');
             var token = jwt.sign({user: user.id}, jwtConfig.secret, {expiresIn: jwtConfig.expiresIn});
@@ -28,6 +29,7 @@ module.exports = {
         if(!password) return res.badRequest('Expected password');
 
         UserService.authenticate(username, password, function(err, user) {
+            if (err === 'Invalid credentials') return res.badRequest(err);
             if (err) return res.negotiate(err);
             if (!user) return res.badRequest('Invalid credentials.');
             req.session.me = user.id;
