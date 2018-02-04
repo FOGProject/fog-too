@@ -1,37 +1,36 @@
 /**
- * UserController
+ * iPXE Controller
  *
- * @description :: Server-side logic for managing Hosts
+ * @description :: Server-side logic for managing ipxe items
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+
 module.exports = {
     list: function(req, res) {
-        User.find().exec(function(err, result) {
+        Ipxe.find().exec(function(err, result) {
             if (err) return res.negotiate(err);
             res.json(result);
         });
     },
-    listMe: function(req, res) {
-        res.json(req.user);
-    },
     find: function(req, res) {
         var id = req.param('id');
-        User.find({id: id}).exec(function(err, result) {
+        Ipxe.find({id: id}).exec(function(err, result) {
             if (err) return res.negotiate(err);
             res.json(result);
         });
     },
     search: function(req, res) {
         var query = req.query;
-        User.find(query, function(err, result) {
+        Ipxe.find(query, function(err, result) {
             if (err) return res.negotiate(err);
             res.json(result);
         });
     },
     create: function(req, res) {
         var params = req.params.all();
-        User.create(params).exec(function(err, result) {
+        Ipxe.create(params).exec(function(err, result) {
             if (err) return res.negotiate(err);
-            res.location('/api/user/'+result.id);
+            res.location('/api/ipxe/'+result.id);
             res.created(result);
         });
     },
@@ -39,16 +38,17 @@ module.exports = {
         var id = req.param('id');
         var params = req.params.all();
         params['id'] = undefined;
-        User.update({id: id}, params).exec(function(err, result) {
+        Ipxe.update({id: id}, params).exec(function(err, result) {
             if (err) return res.negotiate(err);
             res.json(result);
         });
     },
     destroy: function(req, res) {
         var id = req.param('id');
-        User.destroy({id: id}).exec(function(err) {
+        Ipxe.destroy({id: id}).exec(function(err) {
             if (err) return res.negotiate(err);
             res.json();
         });
     }
 };
+
