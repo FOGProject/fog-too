@@ -13,6 +13,7 @@ describe('Ipxe', function() {
             should.exist(ipxes);
             ipxes.length.should.be.eql(1);
             ipxes[0].title.should.be.eql("Example");
+            ipxes[0].description.should.be.eql("Test");
             done();
         });
     });
@@ -30,7 +31,7 @@ describe('Ipxe', function() {
             should.exist(updated);
             updated.length.should.be.eql(1);
             updated[0].title.should.be.eql("ToUpdate");
-            updated[0].description.should.be.eq("Test");
+            updated[0].description.should.be.eql("Test");
             done();
         });
     });
