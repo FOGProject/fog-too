@@ -8,7 +8,7 @@ var verifyDB = function(answers, next)
 {
     var status = new Spinner('Verifying database information, please wait...');
     status.start();  
-    database.connect(answers.host, answers.port, answers.db, answers.username, answers.password, function(err, db) {
+    database.connect(answers.host, answers.port, answers.database, answers.username, answers.password, function(err, db) {
         status.stop();
         if(err) {
             var prefix = "MongoError: ";
