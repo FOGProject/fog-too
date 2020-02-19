@@ -24,8 +24,8 @@ async.waterfall([
             if(!answers.username.length)
                 delete answers.username;
 
-            payload.connection = payload.connection || {};
-            payload.connection.main = answers;
+            payload.connections = payload.connections || {};
+            payload.connections.main = answers;
             next();
         });
     },
