@@ -7,7 +7,7 @@ var database = require('../../lib/database');
 var verifyDB = function(answers, next)
 {
     var status = new Spinner('Verifying database information, please wait...');
-    status.start();  
+    status.start();
     database.connect(answers.host, answers.port, answers.db, answers.username, answers.password, function(err, db) {
         status.stop();
         if(err) {
@@ -26,7 +26,7 @@ var verifyDB = function(answers, next)
 
 module.exports = {
     getDatabaseInfo: function(next) {
-        var questions = [         
+        var questions = [
             {
                 name: 'host',
                 type: 'input',
@@ -51,9 +51,9 @@ module.exports = {
                         return 'You must enter a number';
                     }
                 }
-            },             
+            },
             {
-                name: 'database',
+                name: 'db',
                 type: 'input',
                 message: 'Enter the database name:',
                 validate: function( value ) {
@@ -63,7 +63,7 @@ module.exports = {
                         return 'Please enter the database';
                     }
                 }
-            },                                  
+            },
             {
                 name: 'username',
                 type: 'input',
@@ -78,7 +78,7 @@ module.exports = {
                 }
             }
         ];
-        inquirer.prompt(questions).then(function(answers) {      
+        inquirer.prompt(questions).then(function(answers) {
             verifyDB(answers, function(err) {
                 if(err)
                     return module.exports.getDatabaseInfo(next);
@@ -123,7 +123,7 @@ module.exports = {
                 type: 'input',
                 message: 'What address should FOG bind to:',
                 default: '0.0.0.0'
-            },   
+            },
             {
                 name: 'port',
                 type: 'input',
@@ -136,7 +136,7 @@ module.exports = {
                         return 'You must enter a number';
                     }
                 }
-            },                     
+            },
             {
                 name: 'proxy',
                 type: 'confirm',
@@ -150,7 +150,7 @@ module.exports = {
                 when: function (answers) {
                     return answers['proxy'];
                 }
-            },                        
+            },
             {
                 name: 'vertical',
                 type: 'confirm',
