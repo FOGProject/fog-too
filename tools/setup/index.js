@@ -24,8 +24,8 @@ async.waterfall([
             if(!answers.username.length)
                 delete answers.username;
 
-            payload.connections = payload.connections || {};
-            payload.connections.main = answers;
+            payload.connection = payload.connection || {};
+            payload.connection.main = answers;
             next();
         });
     },
@@ -34,7 +34,7 @@ async.waterfall([
         inquire.getAdminInfo(function(answers) {
             payload.admin = answers;
             next();
-        });       
+        });
     },
     function(next) {
         header.printSection("Webserver configuration");
@@ -45,19 +45,19 @@ async.waterfall([
             delete answers.host;
             payload.webserver = answers;
             next();
-        });       
+        });
     },
     function(next) {
         header.printSection("Securing installation");
         var status = new Spinner('Generating session secret');
-        status.start();  
+        status.start();
         payload.session = {};
         payload.session.secret = secure.generateSecret();
         status.stop();
         console.log("Session secret generated");
 
         var status = new Spinner('Generating JWT secret');
-        status.start();  
+        status.start();
         payload.auth = {};
         payload.auth.jwt = {};
         payload.auth.jwt.secret = secure.generateSecret();
@@ -76,7 +76,7 @@ async.waterfall([
     function(next) {
         header.printSection("Applying configuration");
         var status = new Spinner('Saving configuration');
-        status.start();  
+        status.start();
         var toWrite = JSON.parse(JSON.stringify(payload)); // quick deep clone
         delete toWrite.admin;
         config.overlayPrefs(toWrite);
@@ -88,14 +88,14 @@ async.waterfall([
     },
     function(next) {
         var status = new Spinner('Applying database schema');
-        status.start();  
+        status.start();
         schema.generate(payload.admin.password, payload.admin.email, function(err) {
             status.stop();
             if(err) return next("Failed to apply database schema: " + err);
             console.log("Database schema applied");
             next();
         });
-    },   
+    },
 ], function (err, result) {
     if(err) console.log(chalk.bgRed(err));
     COMPLETED = true;
@@ -103,5 +103,5 @@ async.waterfall([
 });
 
 (function wait () {
-   if (!COMPLETED) setTimeout(wait, 1000);
+    if (!COMPLETED) setTimeout(wait, 1000);
 })();
