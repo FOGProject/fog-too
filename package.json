@@ -5,7 +5,7 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
-    "base64url": "^2.0.0",
+    "base64url": "^3.0.1",
     "bcryptjs": "^2.4.0",
     "bluebird": "^3.4.7",
     "chalk": "^1.1.3",
